@@ -38,6 +38,8 @@ jobs:
       run: |
         cd Server
         npm test
+      env:
+        MONGOOSE_URI_TEST: ${{ secrets.MONGOOSE_URI_TEST }}
     
     - name: 🧪 Run Cypress E2E tests
       uses: cypress-io/github-action@v6
