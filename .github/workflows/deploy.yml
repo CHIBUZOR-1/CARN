@@ -40,6 +40,7 @@ jobs:
         npm test
       env:
         MONGOOSE_URI_TEST: ${{ secrets.MONGOOSE_URI_TEST }}
+        JWTSECRET: ${{ secrets.JWTSECRET }}
     
     - name: 🧪 Run Cypress E2E tests
       uses: cypress-io/github-action@v6
