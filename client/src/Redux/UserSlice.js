@@ -13,14 +13,6 @@ export const userSlice = createSlice({
         },
         logout: (state) => {
             state.user = null;
-        },
-        updateProfilez: (state, action) => { 
-            if (state.user) { 
-                state.user.name = action.payload.name;
-                state.user.email = action.payload.email;
-                state.user.phone = action.payload.phone;
-                state.user.photo = action.payload.image; 
-            } 
         }
     },
 });

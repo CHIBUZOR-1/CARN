@@ -62,7 +62,7 @@ const ResetPassword = () => {
 				<div  className='w-full flex items-center justify-center py-1'>
                   <button type='submit' disabled={loading} className='bg-green-950 p-1 w-[80%] rounded-md flex items-center gap-1 justify-center text-white font-semibold'>
                     Change
-                    {loading && <span className='h-5 w-5 border-[2px] rounded-full  border-t-green-600 animate-spin'></span>}
+                    {loading && <span role="status" className='h-5 w-5 border-[2px] rounded-full  border-t-green-600 animate-spin'></span>}
                   </button>
                 </div>
 			</form>

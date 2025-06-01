@@ -48,7 +48,7 @@ const register = async(req, res) => {
             msg: "Registered sucessfully"
         })
     } catch (error) {
-        console.log(error);
+        console.error('SIGN-UP ERROR:', error);
         res.status(500).json({
             ok: false,
             error: true,
@@ -91,7 +91,6 @@ const Login = async(req, res)=> {
             user: { ...user._doc, password: undefined }
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             ok: false,
             error: true,
@@ -103,7 +102,6 @@ const Login = async(req, res)=> {
 const forgotPassword = async (req, res) => {
 	try {
         const { email } = req.body;
-        console.log(email)
 		const user = await userModel.findOne({ email });
 
 		if (!user) {
@@ -124,7 +122,6 @@ const forgotPassword = async (req, res) => {
 
 		res.status(200).json({ ok: true, msg: "Password reset link sent to your email" });
 	} catch (error) {
-		console.log("Error in forgotPassword ", error);
 		res.status(400).json({ ok: false, msg: error.message });
 	}
 };
@@ -133,7 +130,6 @@ const resetPassword = async (req, res) => {
 	try {
 		const { token } = req.params;
 		const { password } = req.body;
-        console.log(token, password)
 
 		const user = await userModel.findOne({
 			resetPasswordToken: token,
@@ -157,7 +153,6 @@ const resetPassword = async (req, res) => {
 
 		res.status(200).json({ ok: true, msg: "Password reset successful" });
 	} catch (error) {
-		console.log("Error in resetPassword ", error);
 		res.status(400).json({ ok: false, msg: error.message });
 	}
 };
@@ -187,7 +182,6 @@ const verifyEmail = async (req, res) => {
 			user
 		});
 	} catch (error) {
-		console.log("error in verifyEmail ", error);
 		res.status(500).json({ ok: false, msg: "Server error" });
 	}
 };
@@ -202,7 +196,6 @@ const logout = async(req, res) => {
             msg: "Logged Out successfully"
         })
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             error: true,
             ok: false,
