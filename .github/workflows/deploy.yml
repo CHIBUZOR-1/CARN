@@ -1,0 +1,75 @@
+name: Deploy Fullstack to Render Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '22.13.1'
+
+    - name: Install dependencies and build frontend
+      run: |
+        cd client
+        npm install
+        npm run build
+    
+    - name: Run frontend tests (Vitest)
+      run: |
+        cd client
+        npx vitest run
+
+    - name: Install dependencies for backend
+      run: |
+        cd Server
+        npm install
+    
+    - name: Run backend tests (Jest)
+      run: |
+        cd Server
+        npm test
+    
+    - name: 🧪 Run Cypress E2E tests
+      uses: cypress-io/github-action@v6
+      with:
+        working-directory: ./client
+        start: npm run preview
+        wait-on: 'http://localhost:4173'
+        wait-on-timeout: 90 # increase from default 60s
+        browser: chrome
+
+    - name: Deploy to Render
+      if: success() # deploy only if tests pass
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        MONGOOSE_URL: ${{ secrets.MONGOOSE_URL }}
+        MONGOOSE_URI_TEST: ${{ secrets.MONGOOSE_URI_TEST }}
+        CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL}}
+        HOSTPORT: ${{ secrets.HOSTPORT }}
+        ORIGIN: ${{ secrets.ORIGIN }}
+        JWTSECRET: ${{ secrets.JWTSECRET }}
+        NODE_ENV: ${{ secrets.NODE_ENV }}
+        EMAIL: ${{ secrets.EMAIL }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        SECURE: ${{ secrets.SECURE }}
+        PORTZ: ${{ secrets.PORTZ }}
+        HOST: ${{ secrets.HOST }}
+        SERVICE: ${{ secrets.SERVICE }}
+        VITE_API_URL: ${{ secrets.VITE_API_URL }}
+      run: |
+        curl -X POST \
+        -H 'Accept: application/vnd.api+json' \
+        -H 'Authorization: Bearer $RENDER_API_KEY' \
+        -H 'Content-Type: application/json' \
+        -d '{"service_id":"srv-d0ubkr49c44c73alpj00"}' \
+        https://api.render.com/v1/services/srv-d0ubkr49c44c73alpj00/deploys
