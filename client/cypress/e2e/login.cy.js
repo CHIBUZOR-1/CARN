@@ -20,7 +20,9 @@ describe('Login Page', () => {
     cy.get('input[name=password]:invalid').should('have.length', 1);
 
     // Still on login page
-    //cy.url().should('eq', 'http://localhost:5173/');
+    //cy.url().should('eq', 'http://localhost:5173/'); or
+    //cy.url().should('eq', `${Cypress.config().baseUrl}/`); or
+    //cy.location('pathname').should('eq', '/');
     cy.url().should('include', '/');
   });
   it('should display error toast for invalid login', () => {
